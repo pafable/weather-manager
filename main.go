@@ -59,5 +59,6 @@ func main() {
 		}
 
 		fmt.Printf("The temperature is %d celsius\n", *t1.Temperature)
+		fmt.Printf("The temperature is %.1f fahrenheit\n", t1.Fahrenheit())
 	}
 }
