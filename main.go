@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"weather-manager/pkg/errChkr"
 	"weather-manager/pkg/temperature"
 	"weather-manager/pkg/weather"
 )
@@ -12,26 +13,17 @@ import (
 var W *flag.FlagSet = weather.MainCmd
 var T *flag.FlagSet = temperature.MainCmd
 
-func errorCheck() {
-	if len(os.Args) < 2 {
-		log.Fatal("weather or temperature is required!")
-	}
-
-	if os.Args[1] == "temp" || os.Args[1] == "weather" {
-	} else {
-		log.Fatal("weather or temperature is required!")
-	}
-}
-
 func main() {
+	//  checks to make sure there are args
+	errChkr.ErrorCheck()
+
 	w1 := weather.Wthr{
-		weather.Weather(),
-	}
-	t1 := temperature.Temp{
-		temperature.Temperature(),
+		Weather: weather.Weather(),
 	}
 
-	errorCheck()
+	t1 := temperature.Temp{
+		Temperature: temperature.Temperature(),
+	}
 
 	switch os.Args[1] {
 	case "weather":
@@ -46,6 +38,7 @@ func main() {
 		}
 
 		fmt.Printf("The weather condition is %s\n", *w1.Weather)
+		fmt.Printf("%s\n", w1.WindCond())
 
 	case "temp":
 		if len(os.Args) < 4 {
@@ -58,7 +51,14 @@ func main() {
 			log.Fatal(tErr)
 		}
 
-		fmt.Printf("The temperature is %d celsius\n", *t1.Temperature)
-		fmt.Printf("The temperature is %.1f fahrenheit\n", t1.Fahrenheit())
+		fmt.Printf("The temperature is %.1f celsius\n", *t1.Temperature)
+
+		if *t1.Fahrenheit() >= 88.0 {
+			fmt.Printf("The temperature is %.1f fahrenheit, it's burning hot!\n", *t1.Fahrenheit())
+		} else {
+			fmt.Printf("The temperature is %.1f fahrenheit\n", *t1.Fahrenheit())
+		}
+
+		fmt.Printf("The temperature is %.1f kelvin\n", *t1.Kelvin())
 	}
 }
