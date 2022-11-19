@@ -1,17 +1,12 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"log"
 	"os"
 	"weather-manager/pkg/errChkr"
 	"weather-manager/pkg/temperature"
 	"weather-manager/pkg/weather"
 )
-
-var W *flag.FlagSet = weather.MainCmd
-var T *flag.FlagSet = temperature.MainCmd
 
 func main() {
 	//  checks to make sure there are args
@@ -27,29 +22,15 @@ func main() {
 
 	switch os.Args[1] {
 	case "weather":
-		if len(os.Args) < 4 {
-			weather.MainCmd.PrintDefaults()
-			os.Exit(1)
-		}
-
-		wErr := W.Parse(os.Args[2:])
-		if wErr != nil {
-			log.Fatal(wErr)
-		}
+		// checks to make sure args are passed into weather flag
+		errChkr.WeatherParamCheck()
 
 		fmt.Printf("The weather condition is %s\n", *w1.Weather)
 		fmt.Printf("%s\n", w1.WindCond())
 
 	case "temp":
-		if len(os.Args) < 4 {
-			temperature.MainCmd.PrintDefaults()
-			os.Exit(1)
-		}
-
-		tErr := T.Parse(os.Args[2:])
-		if tErr != nil {
-			log.Fatal(tErr)
-		}
+		// checks to make sure args are passed into temp flag
+		errChkr.TempParamCheck()
 
 		fmt.Printf("The temperature is %.1f celsius\n", *t1.Temperature)
 
