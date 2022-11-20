@@ -24,11 +24,17 @@ func (w Wthr) WindCond() string {
 	var randNum int = rand.Intn(100)
 
 	switch {
-	case randNum < 33:
+	case randNum < 10:
 		return fmt.Sprintf("The winds are slow and are moving at %d mph", randNum)
-	case randNum < 66:
+	case randNum < 30:
 		return fmt.Sprintf("The winds are med and are breezing at %d mph", randNum)
 	default:
 		return fmt.Sprintf("The winds are fast and are howling at %d mph", randNum)
 	}
+}
+
+func (w Wthr) Result() (*string, string) {
+	condRes := fmt.Sprintf("The weather condition is %s", *w.Weather)
+	windRes := fmt.Sprintf("%s", w.WindCond())
+	return &condRes, windRes
 }

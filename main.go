@@ -25,21 +25,19 @@ func main() {
 		// checks to make sure args are passed into weather flag
 		errChkr.WeatherParamCheck()
 
-		fmt.Printf("The weather condition is %s\n", *w1.Weather)
-		fmt.Printf("%s\n", w1.WindCond())
+		w1.Result()
+
+		resWthr, resWind := w1.Result()
+		fmt.Printf("%s\n", *resWthr)
+		fmt.Printf("%s\n", resWind)
 
 	case "temp":
 		// checks to make sure args are passed into temp flag
 		errChkr.TempParamCheck()
 
-		fmt.Printf("The temperature is %.1f celsius\n", *t1.Temperature)
-
-		if *t1.Fahrenheit() >= 88.0 {
-			fmt.Printf("The temperature is %.1f fahrenheit, it's burning hot!\n", *t1.Fahrenheit())
-		} else {
-			fmt.Printf("The temperature is %.1f fahrenheit\n", *t1.Fahrenheit())
-		}
-
-		fmt.Printf("The temperature is %.1f kelvin\n", *t1.Kelvin())
+		celsius, fahrenheit, kelvin := t1.Result()
+		fmt.Printf("%s", *celsius)
+		fmt.Printf("%s", *fahrenheit)
+		fmt.Printf("%s", *kelvin)
 	}
 }
