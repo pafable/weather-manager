@@ -25,8 +25,6 @@ func main() {
 		// checks to make sure args are passed into weather flag
 		errChkr.WeatherParamCheck()
 
-		w1.Result()
-
 		resWthr, resWind := w1.Result()
 		fmt.Printf("%s\n", *resWthr)
 		fmt.Printf("%s\n", resWind)
