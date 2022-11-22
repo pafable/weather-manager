@@ -7,7 +7,7 @@ go run main.go temp --degree <int>
 ```
 
 ```
-go run main.go weather --cond <string>
+go run main.go weather --location <string>
 ```
 
 ### Building a binary

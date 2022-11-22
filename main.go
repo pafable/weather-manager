@@ -5,16 +5,11 @@ import (
 	"os"
 	"weather-manager/pkg/errChkr"
 	"weather-manager/pkg/temperature"
-	"weather-manager/pkg/weather"
 )
 
 func main() {
 	//  checks to make sure there are args
 	errChkr.ErrorCheck()
-
-	w1 := weather.Wthr{
-		Weather: weather.Weather(),
-	}
 
 	t1 := temperature.Temp{
 		Temperature: temperature.Temperature(),

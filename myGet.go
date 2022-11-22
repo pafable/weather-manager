@@ -1,22 +1,27 @@
-package weather
+package main
 
 import (
-	"flag"
+	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"os"
 )
 
-const CURRENTWEATHER = "http://api.weatherapi.com/v1/current.json"
-
 var APIKEY string = os.Getenv("APIKEY")
 var LOCATION string = os.Getenv("LOCATION")
-var MainCmd *flag.FlagSet = flag.NewFlagSet("weather", flag.ExitOnError)
 
-type Wstruct struct {
+const CURRENTWEATHER = "http://api.weatherapi.com/v1/current.json"
+
+type WeatherStruct struct {
 	Current struct {
-		TempC     float64 `json:"temp_c"`
-		IsDay     int     `json:"is_day"`
-		Condition struct {
+		LastUpdatedEpoch int     `json:"last_updated_epoch"`
+		LastUpdated      string  `json:"last_updated"`
+		TempC            float64 `json:"temp_c"`
+		TempF            float64 `json:"temp_f"`
+		IsDay            int     `json:"is_day"`
+		Condition        struct {
 			Text string `json:"text"`
 			Icon string `json:"icon"`
 			Code int    `json:"code"`
@@ -41,9 +46,31 @@ type Wstruct struct {
 	}
 }
 
-func Weather() *string {
-	fmt.Println(os.Args[1:])
-	x := MainCmd.String("myarg", "lol", "enter zip code")
-	flag.Parse()
-	return x
+func main() {
+	var x string = fmt.Sprintf(
+		"%s?key=%s&q=%s",
+		CURRENTWEATHER,
+		APIKEY,
+		LOCATION)
+	resp, err := http.Get(x)
+
+	// close connection to prevent memory leaks
+	defer resp.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w := WeatherStruct{}
+	err = json.Unmarshal(body, &w)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%.1fC\n", w.Current.TempC)
+	fmt.Printf("%.1fF", w.Current.TempF)
 }
