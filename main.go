@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"weather-manager/pkg/errChkr"
 	"weather-manager/pkg/temperature"
+	"weather-manager/pkg/weather"
 )
 
 func main() {
@@ -16,18 +18,12 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "weather":
-		// checks to make sure args are passed into weather flag
-		errChkr.WeatherParamCheck()
-
-		resWthr, resWind := w1.Result()
-		fmt.Printf("%s\n", *resWthr)
-		fmt.Printf("%s\n", resWind)
+	case "condition":
+		w := weather.Condition()
+		fmt.Printf("It is %s with winds blowing at %.1f mph from the %s\n", strings.ToLower(w.Current.Condition.Text), w.Current.WindMph, w.Current.WindDir)
+		fmt.Printf("It feels like %.1f F\n", w.Current.FeelslikeF)
 
 	case "temp":
-		// checks to make sure args are passed into temp flag
-		errChkr.TempParamCheck()
-
 		celsius, fahrenheit, kelvin := t1.Result()
 		fmt.Printf("%s", *celsius)
 		fmt.Printf("%s", *fahrenheit)

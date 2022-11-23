@@ -1,15 +1,16 @@
 package weather
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"os"
+	"weather-manager/pkg/wmConstants"
 )
 
-const CURRENTWEATHER = "http://api.weatherapi.com/v1/current.json"
-
-var APIKEY string = os.Getenv("APIKEY")
-var LOCATION string = os.Getenv("LOCATION")
 var MainCmd *flag.FlagSet = flag.NewFlagSet("weather", flag.ExitOnError)
 
 type Wstruct struct {
@@ -41,9 +42,42 @@ type Wstruct struct {
 	}
 }
 
-func Weather() *string {
-	fmt.Println(os.Args[1:])
-	x := MainCmd.String("myarg", "lol", "enter zip code")
-	flag.Parse()
-	return x
+func getCurrent(s *string) []byte {
+	var url string = fmt.Sprintf(
+		"%s?key=%s&q=%s",
+		wmConstants.CURRENTWEATHER,
+		wmConstants.APIKEY,
+		*s)
+	resp, err := http.Get(url)
+
+	// close connection to prevent memory leaks
+	defer resp.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return body
+}
+
+func Condition() *Wstruct {
+	x := MainCmd.String("location", "", "enter zip code")
+	err := MainCmd.Parse(os.Args[2:])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	body := getCurrent(x)
+
+	w := Wstruct{}
+	err = json.Unmarshal(body, &w)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &w
 }
