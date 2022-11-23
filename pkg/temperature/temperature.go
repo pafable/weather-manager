@@ -10,23 +10,30 @@ import (
 
 var MainCmd = flag.NewFlagSet("temperature", flag.ExitOnError)
 
-func parseTempArgs() (*string, error) {
-	x := MainCmd.String("location", "0", "enter zip code")
+func parseTempArgs() *string {
+	x := MainCmd.String("location", "", "enter zip code")
 	err := MainCmd.Parse(os.Args[2:])
-	return x, err
+	if err != nil {
+		MainCmd.PrintDefaults()
+		log.Fatal(err)
+	}
+
+	if len(os.Args) <= 2 {
+		MainCmd.PrintDefaults()
+		os.Exit(1)
+	}
+
+	return x
 
 }
 
 func GetTemp() *wmConstants.Wstruct {
-	zip, err := parseTempArgs()
-	if err != nil {
-		log.Fatal(err)
-	}
+	zip := parseTempArgs()
 
 	body := wmConstants.GetCurrent(zip)
 
 	t := wmConstants.Wstruct{}
-	err = json.Unmarshal(body, &t)
+	err := json.Unmarshal(body, &t)
 	if err != nil {
 		log.Fatal(err)
 	}

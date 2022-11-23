@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"weather-manager/pkg/condition"
 	"weather-manager/pkg/errChkr"
 	"weather-manager/pkg/temperature"
-	"weather-manager/pkg/weather"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "condition":
-		w := weather.GetCondition()
+		w := condition.GetCondition()
 		fmt.Printf("It is %s with winds blowing at %.1f mph from the %s\n", strings.ToLower(w.Current.Condition.Text), w.Current.WindMph, w.Current.WindDir)
 
 	case "temperature":

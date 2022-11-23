@@ -1,4 +1,4 @@
-package weather
+package condition
 
 import (
 	"encoding/json"
@@ -10,22 +10,28 @@ import (
 
 var MainCmd *flag.FlagSet = flag.NewFlagSet("condition", flag.ExitOnError)
 
-func parseWeatherArgs() (*string, error) {
+func parseWeatherArgs() *string {
 	x := MainCmd.String("location", "", "enter zip code")
 	err := MainCmd.Parse(os.Args[2:])
-	return x, err
+	if err != nil {
+		MainCmd.PrintDefaults()
+		log.Fatal(err)
+	}
+
+	if len(os.Args) <= 2 {
+		MainCmd.PrintDefaults()
+		os.Exit(1)
+	}
+	return x
 }
 
 func GetCondition() *wmConstants.Wstruct {
-	zip, err := parseWeatherArgs()
-	if err != nil {
-		log.Fatal(err)
-	}
+	zip := parseWeatherArgs()
 
 	body := wmConstants.GetCurrent(zip)
 
 	w := wmConstants.Wstruct{}
-	err = json.Unmarshal(body, &w)
+	err := json.Unmarshal(body, &w)
 	if err != nil {
 		log.Fatal(err)
 	}
