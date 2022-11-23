@@ -10,7 +10,7 @@ func ErrorCheck() {
 		log.Fatal("condition or temperature is required!")
 	}
 
-	if os.Args[1] == "temp" || os.Args[1] == "condition" {
+	if os.Args[1] == "temperature" || os.Args[1] == "condition" {
 	} else {
 		log.Fatal("condition or temperature is required!")
 	}

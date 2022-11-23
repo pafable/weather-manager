@@ -13,20 +13,15 @@ func main() {
 	//  checks to make sure there are args
 	errChkr.ErrorCheck()
 
-	t1 := temperature.Temp{
-		Temperature: temperature.Temperature(),
-	}
-
 	switch os.Args[1] {
 	case "condition":
-		w := weather.Condition()
+		w := weather.GetCondition()
 		fmt.Printf("It is %s with winds blowing at %.1f mph from the %s\n", strings.ToLower(w.Current.Condition.Text), w.Current.WindMph, w.Current.WindDir)
-		fmt.Printf("It feels like %.1f F\n", w.Current.FeelslikeF)
 
-	case "temp":
-		celsius, fahrenheit, kelvin := t1.Result()
-		fmt.Printf("%s", *celsius)
-		fmt.Printf("%s", *fahrenheit)
-		fmt.Printf("%s", *kelvin)
+	case "temperature":
+		t := temperature.GetTemp()
+		fmt.Printf("It is %.1f C, but feels like %.1f C\n", t.Current.TempC, t.Current.FeelslikeC)
+		fmt.Printf("It is %.1f F, but feels like %.1f F\n", temperature.GetFahrenheit(t.Current.TempC), t.Current.FeelslikeF)
+		fmt.Printf("It is %.1f K\n", temperature.GetKelvin(t.Current.TempC))
 	}
 }
