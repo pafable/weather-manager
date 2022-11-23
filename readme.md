@@ -2,12 +2,18 @@
 
 The purpose of this project is to explore creating commandline tools using Go.
 
+Create an account on [WeatherAPI](https://weatherapi.com) and set your api key as an environment variable.
+
+| Env Var |     Value      | Required |
+|:-------:|:--------------:|:--------:|
+| APIKEY  | <YOUR-API-KEY> |   True   |
+
 ```
-go run main.go temp --degree <int> 
+go run main.go temperature --degree <int> 
 ```
 
 ```
-go run main.go weather --cond <string>
+go run main.go condition --location <zip_code>
 ```
 
 ### Building a binary

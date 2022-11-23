@@ -1,40 +1,34 @@
 package weather
 
 import (
+	"encoding/json"
 	"flag"
-	"fmt"
-	"math/rand"
-	"time"
+	"log"
+	"os"
+	"weather-manager/pkg/wmConstants"
 )
 
-type Wthr struct {
-	Weather *string
+var MainCmd *flag.FlagSet = flag.NewFlagSet("condition", flag.ExitOnError)
+
+func parseWeatherArgs() (*string, error) {
+	x := MainCmd.String("location", "", "enter zip code")
+	err := MainCmd.Parse(os.Args[2:])
+	return x, err
 }
 
-var MainCmd *flag.FlagSet = flag.NewFlagSet("weather", flag.ExitOnError)
-
-func Weather() *string {
-	return MainCmd.String("cond", "", "enter the condition")
-}
-
-func (w Wthr) WindCond() string {
-	// sets random seed
-	rand.Seed(time.Now().UnixNano())
-	// picks a random number from a range of 100
-	var randNum int = rand.Intn(100)
-
-	switch {
-	case randNum < 10:
-		return fmt.Sprintf("The winds are slow and are moving at %d mph", randNum)
-	case randNum < 30:
-		return fmt.Sprintf("The winds are med and are breezing at %d mph", randNum)
-	default:
-		return fmt.Sprintf("The winds are fast and are howling at %d mph", randNum)
+func GetCondition() *wmConstants.Wstruct {
+	zip, err := parseWeatherArgs()
+	if err != nil {
+		log.Fatal(err)
 	}
-}
 
-func (w Wthr) Result() (*string, string) {
-	condRes := fmt.Sprintf("The weather condition is %s", *w.Weather)
-	windRes := fmt.Sprintf("%s", w.WindCond())
-	return &condRes, windRes
+	body := wmConstants.GetCurrent(zip)
+
+	w := wmConstants.Wstruct{}
+	err = json.Unmarshal(body, &w)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &w
 }
