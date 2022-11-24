@@ -9,8 +9,9 @@ Create an account on [WeatherAPI](https://weatherapi.com) and set your api key a
 | APIKEY  | YOUR-API-KEY |   True   |
 
 ```
-go run main.go temperature --location <zip_code> 
+go run main.go temperature --location <zip_code> --scale <temp_scale>
 ```
+(default temp scale is celsius)
 
 ```
 go run main.go condition --location <zip_code>
