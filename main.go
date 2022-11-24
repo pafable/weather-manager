@@ -20,8 +20,14 @@ func main() {
 
 	case "temperature":
 		t := temperature.GetTemp()
-		fmt.Printf("It is %.1f C, but feels like %.1f C\n", t.Current.TempC, t.Current.FeelslikeC)
-		fmt.Printf("It is %.1f F, but feels like %.1f F\n", temperature.GetFahrenheit(t.Current.TempC), t.Current.FeelslikeF)
-		fmt.Printf("It is %.1f K\n", temperature.GetKelvin(t.Current.TempC))
+
+		switch os.Args[5] {
+		case "celsius":
+			fmt.Printf("It is %.1f C, but feels like %.1f C\n", t.Current.TempC, t.Current.FeelslikeC)
+		case "fahrenheit":
+			fmt.Printf("It is %.1f F, but feels like %.1f F\n", temperature.GetFahrenheit(t.Current.TempC), t.Current.FeelslikeF)
+		case "kelvin":
+			fmt.Printf("It is %.1f K\n", temperature.GetKelvin(t.Current.TempC))
+		}
 	}
 }

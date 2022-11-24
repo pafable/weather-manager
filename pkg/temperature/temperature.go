@@ -12,6 +12,7 @@ var MainCmd = flag.NewFlagSet("temperature", flag.ExitOnError)
 
 func parseTempArgs() *string {
 	x := MainCmd.String("location", "", "enter zip code")
+	MainCmd.String("scale", "celsius", "temperature scale")
 	err := MainCmd.Parse(os.Args[2:])
 	if err != nil {
 		MainCmd.PrintDefaults()
@@ -28,7 +29,6 @@ func parseTempArgs() *string {
 
 func GetTemp() *wmConstants.Wstruct {
 	zip := parseTempArgs()
-
 	body := wmConstants.GetCurrent(zip)
 
 	t := wmConstants.Wstruct{}
