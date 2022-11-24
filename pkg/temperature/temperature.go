@@ -24,7 +24,6 @@ func parseTempArgs() *string {
 	}
 
 	return x
-
 }
 
 func GetTemp() *wmConstants.Wstruct {

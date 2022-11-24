@@ -9,7 +9,7 @@ Create an account on [WeatherAPI](https://weatherapi.com) and set your api key a
 | APIKEY  | <YOUR-API-KEY> |   True   |
 
 ```
-go run main.go temperature --degree <int> 
+go run main.go temperature --location <zip_code> 
 ```
 
 ```
